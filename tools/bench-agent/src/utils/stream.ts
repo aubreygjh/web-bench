@@ -108,10 +108,12 @@ export const streamSseArray = async (
 ): Promise<{
   error?: string
   content: string
+  usage?: any
 }> => {
   let timer
 
   let content = ''
+  let usage: any = undefined
 
   try {
     timer = setTimeout(() => {
@@ -123,6 +125,11 @@ export const streamSseArray = async (
         new Error('Request timed out.')
       }, 5000)
       content += getValue(value)
+      
+      // Capture usage data if present in the stream
+      if (value.usage) {
+        usage = value.usage
+      }
     }
   } catch (e) {
     let msg = ''
@@ -134,11 +141,13 @@ export const streamSseArray = async (
     return {
       error: msg || 'unknown error',
       content,
+      usage,
     }
   }
 
   return {
     content,
+    usage,
   }
 }
 

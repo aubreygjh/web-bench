@@ -12,7 +12,12 @@
 import { ChatMessage, CompletionOptions } from '@web-bench/evaluator-types'
 import { Model, ScheduleTask } from '../type'
 import { FetchUtils } from '../utils/fetch'
+import https from 'https'
 import { countChatMessageTokens } from '../utils/token'
+
+// If set, ignore TLS certificate validation (useful for internal proxy with self-signed cert)
+const IGNORE_SSL = process.env.WEB_BENCH_IGNORE_SSL === '1'
+const httpsAgent: https.Agent | undefined = IGNORE_SSL ? new https.Agent({ rejectUnauthorized: false }) : undefined
 
 export interface LLMOption {
   contextLength: number
@@ -53,9 +58,12 @@ export abstract class BaseLLM {
   public fetch(url: RequestInfo | URL, originInit?: RequestInit) {
     const customFetch = async (input: URL | RequestInfo, init: any) => {
       try {
-        const resp = await FetchUtils.fetchwithRequestOptions(new URL(input as any), {
-          ...init,
-        })
+        const mergedInit = {
+          ...(init as any),
+          // pass agent for Node fetch implementations (node-fetch / undici may differ)
+          agent: httpsAgent as any,
+        }
+        const resp = await FetchUtils.fetchwithRequestOptions(new URL(input as any), mergedInit)
 
         // Error mapping to be more helpful
         if (!resp.ok) {

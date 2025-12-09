@@ -16,6 +16,8 @@ import { HttpsProxyAgent } from 'https-proxy-agent'
 import fetch, { RequestInit, Response } from 'node-fetch'
 import * as fs from 'node:fs'
 import tls from 'node:tls'
+// 如果设置 WEB_BENCH_IGNORE_SSL=1，则对内网自签名证书忽略校验
+const IGNORE_SSL = process.env.WEB_BENCH_IGNORE_SSL === '1'
 const { http, https } = (followRedirects as any).default
 
 export interface ClientCertificateOptions {
@@ -70,7 +72,13 @@ export namespace FetchUtils {
 
     const agentOptions: { [key: string]: any } = {
       ca,
-      rejectUnauthorized: requestOptions?.verifySsl,
+      // honor env override: if WEB_BENCH_IGNORE_SSL=1 then disable verification
+      rejectUnauthorized:
+        IGNORE_SSL
+          ? false
+          : typeof requestOptions?.verifySsl === 'boolean'
+          ? requestOptions!.verifySsl
+          : true,
       timeout,
       sessionTimeout: timeout,
       keepAlive: true,

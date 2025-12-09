@@ -1,6 +1,69 @@
 {
   "models": [
     {
+      "title": "gpt-5",
+      "provider": "openai",
+      "model": "gpt-5",
+      "apiBase": "https://yibuapi.com/v1",
+      "apiKey": "{{YIBU_API_KEY}}"
+    },
+    {
+      "title": "gpt-4o",
+      "provider": "openai",
+      "model": "gpt-4o",
+      "apiBase": "https://yibuapi.com/v1",
+      "apiKey": "{{YIBU_API_KEY}}"
+    },
+    {
+      "title": "deepseek-r1",
+      "provider": "openai",
+      "model": "deepseek-r1",
+      "apiBase": "https://api.gptplus5.com/v1",
+      "apiKey": "{{GPT_PLUS5_API_KEY}}"
+    },
+    {
+      "title": "gpt-5-2025-08-07",
+      "provider": "openai",
+      "model": "gpt-5-2025-08-07",
+      "apiBase": "https://api.gptplus5.com/v1",
+      "apiKey": "{{GPT_PLUS5_API_KEY}}"
+    },
+    {
+      "title": "gemini-2.5-pro",
+      "provider": "openai",
+      "model": "gemini-2.5-pro",
+      "apiBase": "https://api.gptplus5.com/v1",
+      "apiKey": "{{GPT_PLUS5_API_KEY}}"
+    },
+    {
+      "title": "claude-sonnet-4-5-20250929",
+      "provider": "openai",
+      "model": "claude-sonnet-4-5-20250929",
+      "apiBase": "https://api.gptplus5.com/v1",
+      "apiKey": "{{GPT_PLUS5_API_KEY}}"
+    },
+    {
+      "title": "claude-sonnet-4-5-20250929-thinking",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5-20250929-thinking",
+      "apiBase": "https://yibuapi.com/v1",
+      "apiKey": "{{YIBU_API_KEY}}"
+    },
+    {
+      "title": "qwen3-32b",
+      "provider": "openai",
+      "model": "qwen3-32b",
+      "apiBase": "https://api.gptplus5.com/v1",
+      "apiKey": "{{GPT_PLUS5_API_KEY}}"
+    },
+    {
+      "title": "deepseek-v3.1-250821",
+      "provider": "openai",
+      "model": "deepseek-v3.1-250821",
+      "apiBase": "https://api.gptplus5.com/v1",
+      "apiKey": "{{GPT_PLUS5_API_KEY}}"
+    },
+    {
       "model": "claude-3-5-sonnet-20241022",
       "provider": "anthropic",
       "apiKey": "{{ANTHROPIC_API_KEY}}",
@@ -121,13 +184,6 @@
       "title": "gpt-4.1",
       "provider": "openai",
       "model": "gpt-4.1-2025-04-14",
-      "apiBase": "https://api.openai.com/v1/",
-      "apiKey": "{{OPENAI_API_KEY}}"
-    },
-    {
-      "title": "gpt-4o",
-      "provider": "openai",
-      "model": "gpt-4o",
       "apiBase": "https://api.openai.com/v1/",
       "apiKey": "{{OPENAI_API_KEY}}"
     },

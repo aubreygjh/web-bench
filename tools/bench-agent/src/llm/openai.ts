@@ -13,6 +13,9 @@ import { ChatMessage, CompletionOptions, MessageContent } from '@web-bench/evalu
 import { Model, ScheduleTask } from '../type'
 import { streamSse, streamSseArray } from '../utils/stream'
 import { BaseLLM, LLMOption } from './base'
+import { appendFileSync } from 'node:fs'
+import path from 'node:path'
+import crypto from 'node:crypto'
 
 export function stripImages(content: MessageContent): string {
   if (Array.isArray(content)) {
@@ -55,6 +58,14 @@ const NON_CHAT_MODELS = [
   'ada',
 ]
 
+interface TokenUsage {
+  timestamp: string
+  model: string
+  promptTokens: number
+  completionTokens: number
+  totalTokens: number
+}
+
 export class OpenAILLM extends BaseLLM {
   maxStopWords?: number
   apiType?: string
@@ -70,9 +81,43 @@ export class OpenAILLM extends BaseLLM {
   provider: string = 'openai'
 
   apiVersion: string
+  private usageLogPath: string
+  
   constructor(info: Model) {
     super(info)
     this.apiVersion = '2023-07-01-preview'
+    
+    // Create filename based on API key hash
+    const apiKeyHash = this.info.apiKey 
+      ? crypto.createHash('md5').update(this.info.apiKey).digest('hex').substring(0, 8)
+      : 'default'
+    this.usageLogPath = path.join(process.cwd(), `llm-usage-${apiKeyHash}.jsonl`)
+  }
+
+  private logTokenUsage(usage: {
+    prompt_tokens?: number
+    completion_tokens?: number
+    total_tokens?: number
+  }): void {
+    if (!usage || !usage.prompt_tokens) {
+      return
+    }
+
+    const usageEntry: TokenUsage = {
+      timestamp: new Date().toISOString(),
+      model: this.info.model,
+      promptTokens: usage.prompt_tokens || 0,
+      completionTokens: usage.completion_tokens || 0,
+      totalTokens: usage.total_tokens || 0,
+    }
+
+    try {
+      // Append as JSONL (one JSON object per line)
+      const jsonLine = JSON.stringify(usageEntry) + '\n'
+      appendFileSync(this.usageLogPath, jsonLine, 'utf-8')
+    } catch (error) {
+      console.error('Failed to log token usage:', error)
+    }
   }
 
   supportsCompletions(): boolean {
@@ -95,10 +140,10 @@ export class OpenAILLM extends BaseLLM {
     return true
   }
 
-  protected async *_legacystreamComplete(
+  protected async _legacystreamComplete(
     prompt: string,
     options: CompletionOptions
-  ): AsyncGenerator<string> {
+  ): Promise<{ content: string; usage?: any }> {
     const args: any = this._convertArgs(options, [])
     args.prompt = prompt
     args.messages = undefined
@@ -112,11 +157,20 @@ export class OpenAILLM extends BaseLLM {
       }),
     })
 
+    let content = ''
+    let usage: any = undefined
+
     for await (const value of streamSse(response)) {
       if (value.choices?.[0]?.text && value.finish_reason !== 'eos') {
-        yield value.choices[0].text
+        content += value.choices[0].text
+      }
+      // Capture usage data if present
+      if (value.usage) {
+        usage = value.usage
       }
     }
+
+    return { content, usage }
   }
 
   async chat(
@@ -138,16 +192,19 @@ export class OpenAILLM extends BaseLLM {
       this.supportsCompletions() &&
       (NON_CHAT_MODELS.includes(this.info.model) || this.useLegacyCompletionsEndpoint)
     ) {
-      let res = ''
-      for await (const content of this._legacystreamComplete(
+      const { content, usage } = await this._legacystreamComplete(
         stripImages(messages[messages.length - 1]?.content || ''),
         options
-      )) {
-        res += content
+      )
+      
+      // Log token usage for legacy completions
+      if (usage) {
+        this.logTokenUsage(usage)
       }
+      
       return {
         request: '',
-        response: res,
+        response: content,
       }
     }
 
@@ -168,17 +225,27 @@ export class OpenAILLM extends BaseLLM {
 
       const res = data.choices?.[0]?.message?.content
 
+      // Log token usage for non-streaming responses
+      if (data.usage) {
+        this.logTokenUsage(data.usage)
+      }
+
       return {
         request: JSON.stringify(body),
         response: res,
       }
     }
 
-    const { content, error } = await streamSseArray(
+    const { content, error, usage } = await streamSseArray(
       response,
       (value) => value.choices?.[0]?.delta?.content
     )
     // console.log('content', content)
+
+    // Log token usage for streaming responses
+    if (usage) {
+      this.logTokenUsage(usage)
+    }
 
     return {
       request: JSON.stringify(body),
