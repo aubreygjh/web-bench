@@ -68,6 +68,15 @@ export class Ollama extends BaseLLM {
 
     const value = await response.json()
 
+    // Ollama returns prompt_eval_count and eval_count in the response
+    if (value?.prompt_eval_count || value?.eval_count) {
+      this.logTokenUsage({
+        prompt_tokens: value.prompt_eval_count,
+        completion_tokens: value.eval_count,
+        total_tokens: (value.prompt_eval_count || 0) + (value.eval_count || 0),
+      })
+    }
+
     return {
       request: body,
       response: value.message.content,

@@ -77,6 +77,14 @@ export class AnthropicLLM extends BaseLLM {
     if (option.stream === false) {
       const value = await response.json()
 
+      if (value?.usage) {
+        this.logTokenUsage({
+          prompt_tokens: value.usage.input_tokens,
+          completion_tokens: value.usage.output_tokens,
+          total_tokens: (value.usage.input_tokens || 0) + (value.usage.output_tokens || 0),
+        })
+      }
+
       return {
         request: body,
         response: value?.content?.pop()?.text || '',
@@ -84,14 +92,26 @@ export class AnthropicLLM extends BaseLLM {
     }
 
     let res = ''
+    let usage: any = undefined
 
     for await (const value of streamSse(response)) {
       if (value.type == 'message_start') {
+        if (value.message?.usage) {
+          usage = value.message.usage
+        }
         continue
       }
       if (value.delta?.text) {
         res += value.delta.text
       }
+    }
+
+    if (usage) {
+      this.logTokenUsage({
+        prompt_tokens: usage.input_tokens,
+        completion_tokens: usage.output_tokens,
+        total_tokens: (usage.input_tokens || 0) + (usage.output_tokens || 0),
+      })
     }
 
     return {

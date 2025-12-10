@@ -14,6 +14,16 @@ import { Model, ScheduleTask } from '../type'
 import { FetchUtils } from '../utils/fetch'
 import https from 'https'
 import { countChatMessageTokens } from '../utils/token'
+import { appendFileSync } from 'node:fs'
+import path from 'node:path'
+
+interface TokenUsage {
+  timestamp: string
+  model: string
+  promptTokens: number
+  completionTokens: number
+  totalTokens: number
+}
 
 // If set, ignore TLS certificate validation (useful for internal proxy with self-signed cert)
 const IGNORE_SSL = process.env.WEB_BENCH_IGNORE_SSL === '1'
@@ -31,6 +41,7 @@ export abstract class BaseLLM {
   abstract option: LLMOption
 
   info: Model
+  protected usageLogPath: string
 
   get apiBase(): string {
     if (this.info.apiBase) {
@@ -44,6 +55,9 @@ export abstract class BaseLLM {
 
   public constructor(info: Model) {
     this.info = info
+
+    const apiKeySuffix = this.info.apiKey ? this.info.apiKey.slice(-8) : 'default'
+    this.usageLogPath = path.join(process.cwd(), `llm-usage-${apiKeySuffix}.jsonl`)
   }
 
   abstract chat(
@@ -123,6 +137,31 @@ export abstract class BaseLLM {
     }
 
     return customFetch(url, originInit)
+  }
+
+  protected logTokenUsage(usage: {
+    prompt_tokens?: number
+    completion_tokens?: number
+    total_tokens?: number
+  }): void {
+    if (!usage || !usage.prompt_tokens) {
+      return
+    }
+
+    const usageEntry: TokenUsage = {
+      timestamp: new Date().toISOString(),
+      model: this.info.model,
+      promptTokens: usage.prompt_tokens || 0,
+      completionTokens: usage.completion_tokens || 0,
+      totalTokens: usage.total_tokens || 0,
+    }
+
+    try {
+      const jsonLine = JSON.stringify(usageEntry) + '\n'
+      appendFileSync(this.usageLogPath, jsonLine, 'utf-8')
+    } catch (error) {
+      console.error('Failed to log token usage:', error)
+    }
   }
 
   public checkLimit: (_: { runningTask: ScheduleTask[] }) => boolean = () => true

@@ -1,340 +1,75 @@
 {
   "models": [
     {
-      "title": "gpt-5",
+      "title": "gpt-5.1",
       "provider": "openai",
-      "model": "gpt-5",
-      "apiBase": "https://yibuapi.com/v1",
+      "model": "gpt-5.1",
+      "apiBase": "{{YIBU_API_BASE}}",
       "apiKey": "{{YIBU_API_KEY}}"
     },
     {
       "title": "gpt-4o",
       "provider": "openai",
       "model": "gpt-4o",
-      "apiBase": "https://yibuapi.com/v1",
+      "apiBase": "{{YIBU_API_BASE}}",
       "apiKey": "{{YIBU_API_KEY}}"
     },
-    {
-      "title": "deepseek-r1",
-      "provider": "openai",
-      "model": "deepseek-r1",
-      "apiBase": "https://api.gptplus5.com/v1",
-      "apiKey": "{{GPT_PLUS5_API_KEY}}"
-    },
-    {
-      "title": "gpt-5-2025-08-07",
-      "provider": "openai",
-      "model": "gpt-5-2025-08-07",
-      "apiBase": "https://api.gptplus5.com/v1",
-      "apiKey": "{{GPT_PLUS5_API_KEY}}"
-    },
-    {
-      "title": "gemini-2.5-pro",
-      "provider": "openai",
-      "model": "gemini-2.5-pro",
-      "apiBase": "https://api.gptplus5.com/v1",
-      "apiKey": "{{GPT_PLUS5_API_KEY}}"
-    },
-    {
+        {
       "title": "claude-sonnet-4-5-20250929",
       "provider": "openai",
       "model": "claude-sonnet-4-5-20250929",
-      "apiBase": "https://api.gptplus5.com/v1",
-      "apiKey": "{{GPT_PLUS5_API_KEY}}"
+      "apiBase": "{{YUNWU_API_BASE}}",
+      "apiKey": "{{YUNWU_API_KEY}}"
     },
     {
       "title": "claude-sonnet-4-5-20250929-thinking",
-      "provider": "anthropic",
+      "provider": "openai",
       "model": "claude-sonnet-4-5-20250929-thinking",
-      "apiBase": "https://yibuapi.com/v1",
+      "apiBase": "{{YUNWU_API_BASE}}",
+      "apiKey": "{{YUNWU_API_KEY}}"
+    },
+    {
+      "title": "gemini-3-pro-preview",
+      "provider": "openai",
+      "model": "gemini-3-pro-preview",
+      "apiBase": "{{YIBU_API_BASE}}",
       "apiKey": "{{YIBU_API_KEY}}"
     },
     {
       "title": "qwen3-32b",
       "provider": "openai",
       "model": "qwen3-32b",
-      "apiBase": "https://api.gptplus5.com/v1",
+      "apiBase": "{{GPT_PLUS5_API_BASE}}",
       "apiKey": "{{GPT_PLUS5_API_KEY}}"
+    },
+    {
+      "title": "deepseek-r1",
+      "provider": "openai",
+      "model": "deepseek-r1",
+      "apiBase": "{{GPT_PLUS5_API_BASE}}",
+      "apiKey": "{{GPT_PLUS5_API_KEY}}"
+    },
+    {
+      "title": "deepseek-v3.2-251201-thinking",
+      "provider": "openai",
+      "model": "deepseek-v3.2-251201-thinking",
+      "apiBase": "{{YIBU_API_BASE}}",
+      "apiKey": "{{YIBU_API_KEY}}"
     },
     {
       "title": "deepseek-v3.1-250821",
       "provider": "openai",
       "model": "deepseek-v3.1-250821",
-      "apiBase": "https://api.gptplus5.com/v1",
+      "apiBase": "{{GPT_PLUS5_API_BASE}}",
       "apiKey": "{{GPT_PLUS5_API_KEY}}"
     },
     {
-      "model": "claude-3-5-sonnet-20241022",
-      "provider": "anthropic",
-      "apiKey": "{{ANTHROPIC_API_KEY}}",
-      "title": "claude-3-5-sonnet-20241022"
-    },
-    {
-      "model": "claude-sonnet-4-20250514",
-      "provider": "anthropic",
-      "extendThinking": true,
-      "apiKey": "{{ANTHROPIC_API_KEY}}",
-      "title": "claude-4-0-sonnet-latest-thinking"
-    },
-    {
-      "model": "claude-sonnet-4-20250514",
-      "provider": "anthropic",
-      "apiKey": "{{ANTHROPIC_API_KEY}}",
-      "title": "claude-4-0-sonnet-latest"
-    },
-    {
-      "model": "claude-opus-4-20250514",
-      "provider": "anthropic",
-      "extendThinking": true,
-      "apiKey": "{{ANTHROPIC_API_KEY}}",
-      "title": "claude-4-0-opus-latest-thinking"
-    },
-    {
-      "model": "claude-opus-4-20250514",
-      "provider": "anthropic",
-      "apiKey": "{{ANTHROPIC_API_KEY}}",
-      "title": "claude-4-0-opus-latest"
-    },
-    {
-      "model": "claude-3-7-sonnet-latest",
-      "provider": "anthropic",
-      "extendThinking": true,
-      "apiKey": "{{ANTHROPIC_API_KEY}}",
-      "title": "claude-3-7-sonnet-latest-thinking"
-    },
-    {
-      "model": "claude-3-7-sonnet-latest",
-      "provider": "anthropic",
-      "apiKey": "{{ANTHROPIC_API_KEY}}",
-      "title": "claude-3-7-sonnet-latest"
-    },
-    {
-      "title": "anthropic/claude-3.5-sonnet",
-      "provider": "openrouter",
-      "model": "anthropic/claude-3.5-sonnet",
-      "apiBase": "https://openrouter.ai/api/v1",
-      "apiKey": "{{OPENROUTER_API_KEY}}"
-    },
-    {
-      "title": "anthropic/claude-3-opus",
-      "provider": "openrouter",
-      "model": "anthropic/claude-3-opus",
-      "apiBase": "https://openrouter.ai/api/v1",
-      "apiKey": "{{OPENROUTER_API_KEY}}"
-    },
-    {
-      "model": "claude-3-5-haiku-20241022",
-      "provider": "anthropic",
-      "apiKey": "{{ANTHROPIC_API_KEY}}",
-      "title": "claude-3-5-haiku-20241022"
-    },
-    {
-      "model": "claude-3-5-sonnet-20240620",
-      "provider": "anthropic",
-      "apiKey": "{{ANTHROPIC_API_KEY}}",
-      "title": "claude-3-5-sonnet-20240620"
-    },
-    {
-      "model": "claude-3-opus-20240229",
-      "provider": "anthropic",
-      "apiKey": "{{ANTHROPIC_API_KEY}}",
-      "title": "claude-3-opus-20240229"
-    },
-    {
-      "model": "claude-3-sonnet-20240229",
-      "provider": "anthropic",
-      "apiKey": "{{ANTHROPIC_API_KEY}}",
-      "title": "claude-3-sonnet-20240229"
-    },
-    {
-      "model": "claude-3-haiku-20240307",
-      "provider": "anthropic",
-      "apiKey": "{{ANTHROPIC_API_KEY}}",
-      "title": "claude-3-haiku-20240307"
-    },
-    {
-      "title": "openai/o1",
-      "provider": "openrouter",
-      "model": "openai/o1",
-      "apiBase": "https://openrouter.ai/api/v1",
-      "apiKey": "{{OPENROUTER_API_KEY}}"
-    },
-    {
-      "title": "openai/gpt-4.5-preview",
-      "provider": "openrouter",
-      "model": "openai/gpt-4.5-preview",
-      "apiBase": "https://openrouter.ai/api/v1",
-      "apiKey": "{{OPENROUTER_API_KEY}}"
-    },
-    {
-      "title": "openai/o1-preview",
-      "provider": "openrouter",
-      "model": "openai/o1-preview",
-      "apiBase": "https://openrouter.ai/api/v1",
-      "apiKey": "{{OPENROUTER_API_KEY}}"
-    },
-    {
-      "title": "openai/o1-mini",
-      "provider": "openrouter",
-      "model": "openai/o1-mini",
-      "apiBase": "https://openrouter.ai/api/v1",
-      "apiKey": "{{OPENROUTER_API_KEY}}"
-    },
-    {
-      "title": "gpt-4.1",
-      "provider": "openai",
-      "model": "gpt-4.1-2025-04-14",
-      "apiBase": "https://api.openai.com/v1/",
-      "apiKey": "{{OPENAI_API_KEY}}"
-    },
-    {
-      "title": "gpt-4.1-2025-04-14",
-      "provider": "openai",
-      "model": "gpt-4.1-2025-04-14",
-      "apiBase": "https://api.openai.com/v1/",
-      "apiKey": "{{OPENAI_API_KEY}}"
-    },
-    {
-      "title": "o1-2024-12-17",
-      "provider": "openai",
-      "model": "o1-2024-12-17",
-      "apiBase": "https://api.openai.com/v1/",
-      "apiKey": "{{OPENAI_API_KEY}}"
-    },
-    {
-      "title": "aliyun/qwq-plus",
-      "provider": "aliyun",
-      "model": "qwq-plus",
-      "stream": true,
-      "apiKey": "{{ALIYUN_API_KEY}}"
-    },
-    {
-      "title": "openai/gpt-4o",
-      "provider": "openrouter",
-      "model": "openai/gpt-4o",
-      "apiBase": "https://openrouter.ai/api/v1",
-      "apiKey": "{{OPENROUTER_API_KEY}}"
-    },
-    {
-      "title": "openai/gpt-4o-2024-11-20",
-      "provider": "openrouter",
-      "model": "openai/gpt-4o-2024-11-20",
-      "apiBase": "https://openrouter.ai/api/v1",
-      "apiKey": "{{OPENROUTER_API_KEY}}"
-    },
-    {
-      "title": "openai/gpt-4o-2024-08-06",
-      "provider": "openrouter",
-      "model": "openai/gpt-4o-2024-08-06",
-      "apiBase": "https://openrouter.ai/api/v1",
-      "apiKey": "{{OPENROUTER_API_KEY}}"
-    },
-    {
-      "title": "deepseek/deepseek-chat",
-      "provider": "deepseek",
-      "model": "deepseek/deepseek-chat",
-      "apiBase": "https://openrouter.ai/api/v1",
-      "apiKey": "{{OPENROUTER_API_KEY}}"
-    },
-    {
-      "title": "deepseek/deepseek-r1",
-      "provider": "deepseek",
-      "model": "deepseek/deepseek-r1",
-      "apiBase": "https://openrouter.ai/api/v1",
-      "apiKey": "{{OPENROUTER_API_KEY}}"
-    },
-    {
-      "title": "deepseek/deepseek-coder",
-      "provider": "deepseek",
-      "model": "deepseek/deepseek-coder",
-      "apiBase": "https://openrouter.ai/api/v1",
-      "apiKey": "{{OPENROUTER_API_KEY}}"
-    },
-    {
-      "title": "google/gemini-pro-1.5",
-      "provider": "openrouter",
-      "model": "google/gemini-pro-1.5",
-      "apiBase": "https://openrouter.ai/api/v1",
-      "apiKey": "{{OPENROUTER_API_KEY}}"
-    },
-    {
-      "title": "moonshot-v1-32k",
-      "provider": "openai",
-      "model": "moonshot-v1-32k",
-      "apiBase": "https://api.moonshot.cn/v1",
-      "apiKey": "{{MOONSHOT_API_KEY}}"
-    },
-    {
-      "title": "deepseek-chat",
-      "provider": "deepseek",
-      "model": "deepseek-chat",
-      "apiBase": "https://api.deepseek.com/v1",
-      "apiKey": "{{DEEPSEEK_API_KEY}}"
-    },
-    {
-      "title": "ark/deepseek-v3",
-      "provider": "doubao",
-      "model": "{{ARK_DEEPSEEK_V3_ENDPOINT}}",
-      "apiKey": "{{DOUBAO_API_KEY}}"
-    },
-    {
-      "title": "ark/deepseek-r1",
-      "provider": "doubao",
-      "model": "{{ARK_DEEPSEEK_R1_ENDPOINT}}",
-      "apiKey": "{{DOUBAO_API_KEY}}"
-    },
-    {
-      "title": "doubao-pro-32k",
-      "provider": "doubao",
-      "model": "{{DOUBAO_ENDPOINT}}",
-      "apiKey": "{{DOUBAO_API_KEY}}"
-    },
-    {
-      "title": "doubao-pro-1.5-32k",
-      "provider": "doubao",
-      "model": "{{DOUBAO_1_5_ENDPOINT}}",
-      "apiKey": "{{DOUBAO_API_KEY}}"
-    },
-    {
-      "title": "doubao-pro-1.5-32k-thinking",
-      "provider": "doubao",
-      "model": "{{DOUBAO_1_5_THINKING_ENDPOINT}}",
-      "apiKey": "{{DOUBAO_API_KEY}}"
-    },
-    {
-      "title": "doubao-pro-256k",
-      "provider": "doubao",
-      "model": "{{DOUBAO_256K_ENDPOINT}}",
-      "apiKey": "{{DOUBAO_256K_API_KEY}}"
-    },
-    {
-      "title": "doubao-seed-1.6",
-      "provider": "doubao",
-      "model": "{{DOUBAO_SEED_1_6_ENDPOINT}}",
-      "apiKey": "{{DOUBAO_API_KEY}}"
-    },
-    {
-      "title": "doubao-seed-1.6-thinking",
-      "provider": "doubao",
-      "model": "{{DOUBAO_SEED_1_6_THINKING_ENDPOINT}}",
-      "apiKey": "{{DOUBAO_API_KEY}}"
-    },
-    {
-      "title": "aliyun/qwen-max",
-      "provider": "aliyun",
-      "model": "qwen-max",
-      "apiKey": "{{ALIYUN_API_KEY}}"
-    },
-    {
-      "title": "aliyun/qwen-max-latest",
-      "provider": "aliyun",
-      "model": "qwen-max-latest",
-      "apiKey": "{{ALIYUN_API_KEY}}"
-    },
-    {
-      "title": "ollama/mistral-small",
-      "provider": "ollama",
-      "model": "mistral-small"
+      "title": "xxx",
+      "provider": "xxx",
+      "model": "xxx",
+      "apiBase": "xxx",
+      "apiKey": "xxx",
+      "extendThinking": true 
     }
   ]
 }

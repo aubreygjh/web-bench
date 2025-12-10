@@ -13,9 +13,6 @@ import { ChatMessage, CompletionOptions, MessageContent } from '@web-bench/evalu
 import { Model, ScheduleTask } from '../type'
 import { streamSse, streamSseArray } from '../utils/stream'
 import { BaseLLM, LLMOption } from './base'
-import { appendFileSync } from 'node:fs'
-import path from 'node:path'
-import crypto from 'node:crypto'
 
 export function stripImages(content: MessageContent): string {
   if (Array.isArray(content)) {
@@ -58,14 +55,6 @@ const NON_CHAT_MODELS = [
   'ada',
 ]
 
-interface TokenUsage {
-  timestamp: string
-  model: string
-  promptTokens: number
-  completionTokens: number
-  totalTokens: number
-}
-
 export class OpenAILLM extends BaseLLM {
   maxStopWords?: number
   apiType?: string
@@ -73,7 +62,8 @@ export class OpenAILLM extends BaseLLM {
   public useLegacyCompletionsEndpoint: boolean | undefined = undefined
   option: LLMOption = {
     contextLength: 1_000_000,
-    maxTokens: 1024 * 100,
+    // Most OpenAI-compatible providers (e.g. YIBU) cap output to < 65,537 tokens
+    maxTokens: 64_000,
     temperature: 0.4,
     apiBase: 'https://openrouter.ai/api/v1/',
   }
@@ -81,43 +71,10 @@ export class OpenAILLM extends BaseLLM {
   provider: string = 'openai'
 
   apiVersion: string
-  private usageLogPath: string
   
   constructor(info: Model) {
     super(info)
     this.apiVersion = '2023-07-01-preview'
-    
-    // Create filename based on API key hash
-    const apiKeyHash = this.info.apiKey 
-      ? crypto.createHash('md5').update(this.info.apiKey).digest('hex').substring(0, 8)
-      : 'default'
-    this.usageLogPath = path.join(process.cwd(), `llm-usage-${apiKeyHash}.jsonl`)
-  }
-
-  private logTokenUsage(usage: {
-    prompt_tokens?: number
-    completion_tokens?: number
-    total_tokens?: number
-  }): void {
-    if (!usage || !usage.prompt_tokens) {
-      return
-    }
-
-    const usageEntry: TokenUsage = {
-      timestamp: new Date().toISOString(),
-      model: this.info.model,
-      promptTokens: usage.prompt_tokens || 0,
-      completionTokens: usage.completion_tokens || 0,
-      totalTokens: usage.total_tokens || 0,
-    }
-
-    try {
-      // Append as JSONL (one JSON object per line)
-      const jsonLine = JSON.stringify(usageEntry) + '\n'
-      appendFileSync(this.usageLogPath, jsonLine, 'utf-8')
-    } catch (error) {
-      console.error('Failed to log token usage:', error)
-    }
   }
 
   supportsCompletions(): boolean {
